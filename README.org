@@ -1,0 +1,36 @@
+* Implicit Kernel Meta Learning
+This repository contains code and instructions for reproducing figures and
+numbers for the accompanying arxiv preprint (to-be-linked-once-uploaded). It
+also contains the necessary functions to generate the datasets (synthetic and
+real) used in the preprint for benchmarking meta-learning algorithms and may be
+of interest to the meta-learning community independently of the algorithm.
+
+This repository is not finalized.
+
+* Datasets
+The preprint introduces two new meta-learning regression datasets
+- ~Air Quality~ :: Meta-learning tasks derived from Beijing air quality timeseries data spanning a few years
+- ~Gas Sensor~ :: Meta-learning tasks derived Experimental timeseries data from gas sensors
+
+* Setting up the environment
+
+* Reproducing the results
+** Synthetic Data
+** Air Quality
+** Gas Sensor
+
+* Contact
+If you want to ask a question or reach out to me feel free to use my academic
+email address =ucabitf@ucl.ac.uk=!
+
+* TODO
+- [ ] Clean up code
+- [ ] Create instructions for using guild AI
+- [ ] Make everything run from the command line
+- [ ] Data
+  + [ ] Pull data and unpack
+  + [ ] Create datasets
+- [ ] Add bib reference for report
+- [ ] Finish sections
+  + [ ] Setting up the environment
+  + [ ] Reproducing the results

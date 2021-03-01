@@ -1,0 +1,312 @@
+- config: train-flags
+  flags:
+    ways: 5
+    shots: 5
+    meta_lr: 0.001
+    meta_batch_size: 4
+    num_iterations: 40000
+    half_lr_every: 10000
+    seed: 42
+    save_path: "."
+
+- model: air_quality
+  description: "Predict Beijing Air Quality ppm using the rest of the covariates"
+  operations:
+    gaussian:
+      description: "Guassian meta-KRR"
+      main: "scripts/beijing_air_quality/gaussian"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 10000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        s2: 10000000
+        lam: 0.001
+        meta_lr: 0.001
+    bochner:
+      description: "Bochner meta-KRR"
+      main: "scripts/beijing_air_quality/bochner"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 10000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        num_layers: 3
+        hidden_dim: 64
+        nonlinearity: relu
+        latent_d: 64
+        D: 20000
+        lam: 0.001
+        meta_lr: 0.0001
+    mkl_gaussian:
+      description: "MKL Guassian meta-KRR"
+      main: "scripts/beijing_air_quality/mkl"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 10000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        geom_start: 1e0
+        geom_end: 1e12
+        geom_steps: 50
+        lam: 0.001
+        meta_lr: 0.001
+    gaussian_oracle:
+      description: "Guassian KRR oracle"
+      main: "scripts/beijing_air_quality/gaussian_oracle"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        holdout_size: 3000
+    linear:
+      description: "Linear KRR with feature map"
+      main: "scripts/beijing_air_quality/linear"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 10000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        num_layers: 3
+        hidden_dim: 64
+        nonlinearity: relu
+        lam: 0.001
+        meta_lr: 0.00001
+    lsq_bias:
+      description: "Least Squares with learned bias"
+      main: "scripts/beijing_air_quality/lsq_bias"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 10000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        lam: 0.1
+        meta_lr: 0.01
+    maml:
+      description: "MAML"
+      main: "scripts/beijing_air_quality/maml"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/beijing_air_quality"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        num_layers: 1
+        hidden_dim: 64
+        nonlinearity: relu
+        meta_lr: 0.001
+        inner_lr: 0.0000001
+        inner_steps: 1
+
+- model: gas_sensor
+  description: "Forecasting gas concentration"
+  operations:
+    gaussian:
+      description: "Guassian meta-KRR"
+      main: "scripts/gas_sensor/gaussian"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 20
+        k_query: 20
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        s2: 100000
+        lam: 0.001
+        meta_lr: 0.01
+    bochner:
+      description: "Bochner meta-KRR"
+      main: "scripts/gas_sensor/bochner"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 20
+        k_query: 20
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        num_layers: 2
+        hidden_dim: 64
+        nonlinearity: relu
+        latent_d: 64
+        D: 20000
+        lam: 0.001
+        meta_lr: 0.00001
+    linear:
+      description: "Linear KRR with feature map"
+      main: "scripts/gas_sensor/linear"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 25
+        k_query: 25
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        num_layers: 2
+        hidden_dim: 64
+        nonlinearity: relu
+        lam: 0.001
+        meta_lr: 0.0001
+    mkl_gaussian:
+      description: "MKL Guassian meta-KRR"
+      main: "scripts/gas_sensor/mkl"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 20
+        k_query: 20
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        geom_start: 1e0
+        geom_end: 1e8
+        geom_steps: 20
+        lam: 0.001
+        meta_lr: 0.001
+    gaussian_oracle:
+      description: "Guassian KRR oracle"
+      main: "scripts/gas_sensor/gaussian_oracle"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 20
+        k_query: 20
+        holdout_size: 3000
+    maml:
+      description: "MAML"
+      main: "scripts/gas_sensor/maml"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 20
+        k_query: 20
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        num_layers: 3
+        hidden_dim: 64
+        nonlinearity: relu
+        meta_lr: 0.0001
+        inner_lr: 0.0001
+        inner_steps: 1
+    lsq_bias:
+      description: "Least Squares with learned bias"
+      main: "scripts/gas_sensor/lsq_bias"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/gas_sensor"
+      flags-dest: args
+      flags:
+        seed: 42
+        k_support: 20
+        k_query: 20
+        num_iterations: 30000
+        meta_batch_size: 4
+        meta_val_batch_size: 1000
+        meta_val_every: 250
+        holdout_size: 3000
+        lam: 0.1
+        meta_lr: 0.001
+
+- model: signal_recovery
+  description: "Synthetic dataset showing that random kernel models can recover the true kernel"
+  operations:
+    bochner:
+      description: "Bochner signal recovery"
+      main: "scripts/toy_regression/signal_recovery/bochner"
+      output-scalars: '(\key): (\value)'
+      sourcecode: "scripts/toy_regression/signal_recovery"
+      flags-dest: args
+      flags:
+        d: 10
+        runs: 5
+        num_iterations: 5000
+        meta_lr: 0.01
+        num_basis_elements: 3
+        X_bases_sigma: 0.2
+        alpha_sigma: 1.0
+        X_marginal_sigma: 0.2
+        noise: 0.0
+        k_support: 50
+        k_query: 50
+        save_every: 1000
+        num_test: 1000
+        geom_steps: 20
+        geom_start: 0.001
+        geom_end: 1000
+        env_latent_d: 16
+        env_hidden_dim: 32
+        boch_latent_d: 16
+        boch_hidden_dim: 64
+        maml_hidden_dim: 64
+        maml_inner_lr: 0.001
+        maml_num_steps: 3
+        linear_hidden_dim: 64
+        seed: 42
