@@ -1,31 +1,17 @@
 import argparse
 import itertools
-import logging
 import pickle as pkl
 import warnings
 from collections import OrderedDict
 
-import learn2learn as l2l
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import seaborn as sns
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+
 from implicit_kernel_meta_learning.algorithms import RidgeRegression
 from implicit_kernel_meta_learning.data_utils import AirQualityDataLoader
 from implicit_kernel_meta_learning.experiment_utils import set_seed
-from implicit_kernel_meta_learning.kernels import (
-    BochnerKernel,
-    GaussianKernel,
-    LinearKernel,
-)
-from implicit_kernel_meta_learning.parameters import FIGURES_DIR, PROCESSED_DATA_DIR
-from matplotlib import cm
-from mpl_toolkits.mplot3d import Axes3D
-from tqdm import tqdm
+from implicit_kernel_meta_learning.kernels import GaussianKernel
 
 warnings.filterwarnings("ignore")
 
