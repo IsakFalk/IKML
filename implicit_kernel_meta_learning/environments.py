@@ -1,7 +1,8 @@
 from functools import reduce
 
-import torch
 import numpy as np
+import torch
+
 from .kernels import GaussianKernel
 
 
@@ -62,7 +63,7 @@ class MixedKernelRegressionEnvironment:
         alphas_list = [
             2 * self.alpha_dist(self.num_basis_elems_per_kernel) for _ in self.kernels
         ]
-        zipped = zip(X_bases_list, alphas_list, self.kernels)
+        zip(X_bases_list, alphas_list, self.kernels)
         # num_bases = self.num_basis_elems_per_kernel * len(self.kernels)
 
         def f_(X):

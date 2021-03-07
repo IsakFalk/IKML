@@ -1,51 +1,10 @@
-import itertools
-import logging
-import os
 import pickle
 import random
 
-import dill
 import numpy as np
-import pandas as pd
 import torch
-import torch.nn.functional as F
+
 from implicit_kernel_meta_learning.parameters import PROCESSED_DATA_DIR
-
-
-def save_experiment(model_dict, file_name):
-    """Save an experiment in the form of the model dictionary"""
-    # Create save directory
-    experiment_dir = PROCESSED_DATA_DIR / file_name
-    experiment_dir.mkdir(parents=False, exist_ok=True)
-    # Process data
-    save_dict = {}
-    for model, data in model_dict.items():
-        temp_dict = {}
-        # Save the algorithm
-        torch.save(data["alg"], experiment_dir / f"{model}.pt")
-        temp_dict["alg_path"] = experiment_dir / f"{model}.pt"
-        # Dump the data
-        # Note that data need to be in the right format first
-        # So tensors to numpy arrays and so on
-        temp_dict["meta_test"] = data["meta_test"]
-        temp_dict["meta_train"] = data["meta_train"]
-        save_dict[model] = temp_dict
-    with open(experiment_dir / "experiment.dill", "wb") as f:
-        dill.dump(save_dict, f)
-        logging.info("Saved experiment {} to disk".format(file_name))
-
-
-def load_experiment(file_name):
-    """Load an experiment in the form of the model dictionary"""
-    # Experiment directory
-    experiment_dir = PROCESSED_DATA_DIR / file_name
-    with open(experiment_dir / "experiment.dill", "rb") as f:
-        experiment_dict = dill.load(f)
-
-    # Load torch algorithms
-    for model, d in experiment_dict.items():
-        experiment_dict[model]["alg"] = torch.load(d["alg_path"])
-    return experiment_dict
 
 
 class AirQualityDataLoader:
