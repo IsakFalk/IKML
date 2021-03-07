@@ -41,7 +41,7 @@ make create_datasets
 This will pull and build all of the datasets used for benchmarking.
 
 ** Synthetic Data
-Generate the data by choosing a list of input dimensions ~L=${[d_1, d_2, ..., d_L]}~
+Generate the data by choosing a list of input dimensions ~L=[d_1, d_2, ..., d_L]~
 (this list can be of size 1 if but has to be a list). Note that the plotting has
 been hardcoded to work with d being in {1, 2, 5, 10, 20, 30}, so if you want to
 generate the plots, only pick d from this set. From the command line run
