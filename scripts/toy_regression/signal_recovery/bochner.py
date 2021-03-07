@@ -1,35 +1,18 @@
 import argparse
 import pickle as pkl
-import sys
-from copy import deepcopy
 from enum import Enum
 from pathlib import Path
 
 import learn2learn as l2l
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import seaborn as sns
-import sklearn.decomposition as decomposition
-import tikzplotlib as tpl
 import torch
-import torch.autograd as autograd
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
-from implicit_kernel_meta_learning.experiment_utils import set_seed
-from implicit_kernel_meta_learning.kernels import (
-    BochnerKernel,
-    CosKernel,
-    GaussianKernel,
-    LinearKernel,
-)
-from implicit_kernel_meta_learning.parameters import FIGURES_DIR
-from implicit_kernel_meta_learning.utils import infer_dimensions, moving_average
-from mpl_toolkits.mplot3d import Axes3D
-from torch import Tensor
 from tqdm import tqdm
+
+from implicit_kernel_meta_learning.kernels import BochnerKernel, LinearKernel
 
 sns.set_style()
 
@@ -335,7 +318,7 @@ def main(
     maml_losses = np.zeros((runs, num_iterations // save_every))
     linear_losses = np.zeros((runs, num_iterations // save_every))
     oracle_losses = np.zeros(runs)
-    ts = np.arange(0, num_iterations, save_every)
+    np.arange(0, num_iterations, save_every)
 
     # Kernel plotting
     boch_env_cks = []
@@ -516,7 +499,6 @@ def main(
             )
             cur_loss = get_test_performance(oracle_model, test_tasks, criterion)
             if cur_loss < best_oracle_loss:
-                best_oracle_lam = oracle_lam
                 best_oracle_loss = cur_loss
         oracle_losses[run] = best_oracle_loss
 
