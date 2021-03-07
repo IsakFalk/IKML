@@ -1,5 +1,6 @@
 .guild/**/*
 data/**/*
+plots/**/*
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
