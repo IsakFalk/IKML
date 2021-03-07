@@ -1,30 +1,17 @@
 import argparse
-import logging
 import pickle as pkl
 import warnings
 from collections import OrderedDict
 
-import learn2learn as l2l
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import seaborn as sns
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
+
 from implicit_kernel_meta_learning.algorithms import LearnedBiasRidgeRegression
 from implicit_kernel_meta_learning.data_utils import GasSensorDataLoader
 from implicit_kernel_meta_learning.experiment_utils import set_seed
-from implicit_kernel_meta_learning.kernels import (
-    BochnerKernel,
-    GaussianKernel,
-    LinearKernel,
-)
-from implicit_kernel_meta_learning.parameters import FIGURES_DIR, PROCESSED_DATA_DIR
-from matplotlib import cm
-from mpl_toolkits.mplot3d import Axes3D
-from tqdm import tqdm
 
 warnings.filterwarnings("ignore")
 
@@ -43,6 +30,7 @@ def visualise_run(result):
     )
     return fig, ax
 
+
 def fast_adapt_ker(batch, model, loss, device):
     # Unpack data
     X_tr, y_tr = batch["train"]
@@ -58,6 +46,7 @@ def fast_adapt_ker(batch, model, loss, device):
     # Predict
     y_hat = model.predict(X_val)
     return loss(y_val, y_hat)
+
 
 def main(
     seed,
@@ -101,7 +90,6 @@ def main(
     # Keep best model around
     best_val_iteration = 0
     best_val_mse = np.inf
-    current_val_mse = 0.0
 
     for iteration in range(num_iterations):
         validate = True if iteration % meta_val_every == 0 else False
@@ -132,7 +120,9 @@ def main(
                 best_val_mse = meta_valid_error
                 best_state_dict = model.state_dict()
 
-            print("lam {}\n, bias {}".format(torch.exp(model.log_lam).item(), model.bias))
+            print(
+                "lam {}\n, bias {}".format(torch.exp(model.log_lam).item(), model.bias)
+            )
 
         meta_train_error /= meta_batch_size
         result["meta_train_error"].append(meta_train_error)

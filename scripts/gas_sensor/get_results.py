@@ -1,14 +1,13 @@
 import os
-import pickle as pkl
 from enum import Enum
 from glob import glob
 from pathlib import Path
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+
 from implicit_kernel_meta_learning.parameters import FIGURES_DIR, GUILD_RUNS_DIR
 
 sns.set_theme()
@@ -80,7 +79,6 @@ num_cols = ["holdout_meta_valid_error", "holdout_meta_test_error"]
 
 def npfy_results(result):
     run_cols = ["meta_train_error", "meta_valid_error"]
-    num_cols = ["holdout_meta_valid_error", "holdout_meta_test_error"]
     for run_col in run_cols:
         result[run_col] = np.array(result[run_col])
     return result
