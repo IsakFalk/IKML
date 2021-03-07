@@ -1,23 +1,9 @@
 import datetime
 import pickle as pkl
-import random
-from pathlib import Path
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
-import torch
-from implicit_kernel_meta_learning.data_utils import SpatialDataLoader
-from implicit_kernel_meta_learning.experiment_utils import set_seed
-from implicit_kernel_meta_learning.parameters import (
-    FIGURES_DIR,
-    PROCESSED_DATA_DIR,
-    RAW_DATA_DIR,
-)
-from mpl_toolkits.mplot3d import Axes3D
-from sklearn import preprocessing
+
+from implicit_kernel_meta_learning.parameters import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
 data_dir = RAW_DATA_DIR / "beijing_air_quality" / "PRSA_Data_20130301-20170228"
 processed_dir = PROCESSED_DATA_DIR / "beijing_air_quality"
@@ -48,13 +34,11 @@ def load_and_clean_data():
     return df_dict
 
 
-df_dict = load_and_clean_data()
-
 ### Train / val / test splits
 # Split on the temporal index
 # We split into 0.64, 0.16, 0.2
 # according to usual few-shot learning splits
-def split_data():
+def split_data(df_dict):
     train_dict = {}
     val_dict = {}
     test_dict = {}
@@ -71,25 +55,6 @@ def split_data():
     return train_dict, val_dict, test_dict
 
 
-train_dict, val_dict, test_dict = split_data()
-
-# Sum up number of experiments
-train_n = 0
-for val in train_dict.values():
-    train_n += len(val)
-print("train size: {}".format(train_n))
-
-val_n = 0
-for val in val_dict.values():
-    val_n += len(val)
-print("val size: {}".format(val_n))
-
-test_n = 0
-for val in test_dict.values():
-    test_n += len(val)
-print("test size: {}".format(test_n))
-
-
 def dump_data_dicts(data_dir, train_dict, val_dict, test_dict):
     # Dump data
     with open(data_dir / "train.pkl", "wb") as f:
@@ -100,4 +65,28 @@ def dump_data_dicts(data_dir, train_dict, val_dict, test_dict):
         pkl.dump(test_dict, f)
 
 
-dump_data_dicts(processed_dir, train_dict, val_dict, test_dict)
+def main():
+    df_dict = load_and_clean_data()
+
+    train_dict, val_dict, test_dict = split_data(df_dict)
+
+    # Sum up number of experiments
+    train_n = 0
+    for val in train_dict.values():
+        train_n += len(val)
+    print("train size: {}".format(train_n))
+
+    val_n = 0
+    for val in val_dict.values():
+        val_n += len(val)
+    print("val size: {}".format(val_n))
+
+    test_n = 0
+    for val in test_dict.values():
+        test_n += len(val)
+    print("test size: {}".format(test_n))
+
+    dump_data_dicts(processed_dir, train_dict, val_dict, test_dict)
+
+
+main()

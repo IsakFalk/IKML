@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
+
 from implicit_kernel_meta_learning.data_utils import GasSensorDataLoader
 from implicit_kernel_meta_learning.parameters import FIGURES_DIR
 

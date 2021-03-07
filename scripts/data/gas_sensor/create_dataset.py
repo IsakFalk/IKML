@@ -1,14 +1,7 @@
-import datetime
 import pickle as pkl
-import random
-from pathlib import Path
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-import seaborn as sns
-import torch
+
 from implicit_kernel_meta_learning.parameters import (
     FIGURES_DIR,
     PROCESSED_DATA_DIR,
@@ -106,85 +99,58 @@ def create_split_dict(id_dict):
     return train_dict, valid_dict, test_dict
 
 
-# Plotting
-def save_pairplot(df, data_dir, sample=500):
-    small_df = df.loc[:, ["r{}".format(i) for i in range(1, 15)]].sample(sample)
-    fig = sns.pairplot(small_df, kind="kde")
-    fig.savefig(data_dir / "gas_sensor_pairplot.pdf", format="pdf")
+def main():
+    # 0. Read all csvs into dfs
+    df_dict = read_in_all_csvs()
 
+    # 1. For each csv file, make a df with columns "start", "end"
+    # having as entries the timestamps
+    id_dict = extract_id_dfs(df_dict)
+    for df in id_dict.values():
+        assert all(
+            df["start_time"] < df["end_time"]
+        ), "start_time must be before end_time for each event"
 
-# 0. Read all csvs into dfs
-df_dict = read_in_all_csvs()
+    # 2. For each of the extracted id dataframes
+    # Split this up into train, val and test
+    train_dict, valid_dict, test_dict = create_split_dict(id_dict)
 
+    # Sum up number of experiments
+    train_n = 0
+    for val in train_dict.values():
+        train_n += len(val)
+    print("train size: {}".format(train_n))
 
-# 1. For each csv file, make a df with columns "start", "end"
-# having as entries the timestamps
-id_dict = extract_id_dfs(df_dict)
-for df in id_dict.values():
-    assert all(
-        df["start_time"] < df["end_time"]
-    ), "start_time must be before end_time for each event"
+    val_n = 0
+    for val in valid_dict.values():
+        val_n += len(val)
+    print("val size: {}".format(val_n))
 
+    test_n = 0
+    for val in test_dict.values():
+        test_n += len(val)
+    print("test size: {}".format(test_n))
 
-# 2. For each of the extracted id dataframes
-# Split this up into train, val and test
-train_dict, valid_dict, test_dict = create_split_dict(id_dict)
+    with open(processed_dir / "train_dict.pkl", "wb") as f:
+        pkl.dump(train_dict, f)
+    with open(processed_dir / "valid_dict.pkl", "wb") as f:
+        pkl.dump(valid_dict, f)
+    with open(processed_dir / "test_dict.pkl", "wb") as f:
+        pkl.dump(test_dict, f)
 
-# Sum up number of experiments
-train_n = 0
-for val in train_dict.values():
-    train_n += len(val)
-print("train size: {}".format(train_n))
+    with open(processed_dir / "train_dict.pkl", "rb") as f:
+        train_ = pkl.load(f)
+    with open(processed_dir / "valid_dict.pkl", "rb") as f:
+        valid_ = pkl.load(f)
+    with open(processed_dir / "test_dict.pkl", "rb") as f:
+        test_ = pkl.load(f)
 
-val_n = 0
-for val in valid_dict.values():
-    val_n += len(val)
-print("val size: {}".format(val_n))
+    # Make sure everything is fine
+    for i in train_dict.keys():
+        pd.testing.assert_frame_equal(train_[i], train_dict[i])
+        pd.testing.assert_frame_equal(valid_[i], valid_dict[i])
+        pd.testing.assert_frame_equal(test_[i], test_dict[i])
 
-test_n = 0
-for val in test_dict.values():
-    test_n += len(val)
-print("test size: {}".format(test_n))
-
-
-with open(processed_dir / "train_dict.pkl", "wb") as f:
-    pkl.dump(train_dict, f)
-with open(processed_dir / "valid_dict.pkl", "wb") as f:
-    pkl.dump(valid_dict, f)
-with open(processed_dir / "test_dict.pkl", "wb") as f:
-    pkl.dump(test_dict, f)
-
-with open(processed_dir / "train_dict.pkl", "rb") as f:
-    train_ = pkl.load(f)
-with open(processed_dir / "valid_dict.pkl", "rb") as f:
-    valid_ = pkl.load(f)
-with open(processed_dir / "test_dict.pkl", "rb") as f:
-    test_ = pkl.load(f)
-
-# Make sure everything is fine
-for i in train_dict.keys():
-    pd.testing.assert_frame_equal(train_[i], train_dict[i])
-    pd.testing.assert_frame_equal(valid_[i], valid_dict[i])
-    pd.testing.assert_frame_equal(test_[i], test_dict[i])
-
-# Plot timeseries
-r_cols = ["r{}".format(i) for i in range(1, 15)]
-for key, train_df in train_dict.items():
-    # Plot some tasks and experiments to see that they differ
-    task_extractor = train_dict[key].sample(100)
-
-    fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
-    ax = ax.ravel()
-    for i, axis in enumerate(ax):
-        start, end = task_extractor.iloc[i, :].values.squeeze().tolist()
-        task_df = df_dict[key].loc[start:end, r_cols]
-        task_df = task_df.reset_index().drop("time", axis=1)
-        task_df.plot(ax=axis, lw=1.0)
-        axis.get_legend().remove()
-    plt.tight_layout()
-    fig.savefig(fig_dir / "tasks_tsplot-exp{}.pdf".format(key), format="pdf")
-    fig.savefig(fig_dir / "tasks_tsplot-exp{}.png".format(key), format="png")
-
-# Save data dict
-with open(processed_dir / "df_dict.pkl", "wb") as f:
-    pkl.dump(df_dict, f)
+    # Save data dict
+    with open(processed_dir / "df_dict.pkl", "wb") as f:
+        pkl.dump(df_dict, f)
