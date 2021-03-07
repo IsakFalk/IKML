@@ -1,7 +1,6 @@
 import pickle as pkl
 
 import pandas as pd
-
 from implicit_kernel_meta_learning.parameters import (
     FIGURES_DIR,
     PROCESSED_DATA_DIR,
@@ -115,21 +114,22 @@ def main():
     # Split this up into train, val and test
     train_dict, valid_dict, test_dict = create_split_dict(id_dict)
 
+    print("Number of base tasks")
     # Sum up number of experiments
     train_n = 0
     for val in train_dict.values():
         train_n += len(val)
-    print("train size: {}".format(train_n))
+    print("train: {}".format(train_n))
 
     val_n = 0
     for val in valid_dict.values():
         val_n += len(val)
-    print("val size: {}".format(val_n))
+    print("val: {}".format(val_n))
 
     test_n = 0
     for val in test_dict.values():
         test_n += len(val)
-    print("test size: {}".format(test_n))
+    print("test: {}".format(test_n))
 
     with open(processed_dir / "train_dict.pkl", "wb") as f:
         pkl.dump(train_dict, f)
@@ -154,3 +154,6 @@ def main():
     # Save data dict
     with open(processed_dir / "df_dict.pkl", "wb") as f:
         pkl.dump(df_dict, f)
+
+
+main()

@@ -2,7 +2,6 @@ import datetime
 import pickle as pkl
 
 import pandas as pd
-
 from implicit_kernel_meta_learning.parameters import PROCESSED_DATA_DIR, RAW_DATA_DIR
 
 data_dir = RAW_DATA_DIR / "beijing_air_quality" / "PRSA_Data_20130301-20170228"
@@ -71,20 +70,21 @@ def main():
     train_dict, val_dict, test_dict = split_data(df_dict)
 
     # Sum up number of experiments
+    print("Number of base tasks")
     train_n = 0
     for val in train_dict.values():
         train_n += len(val)
-    print("train size: {}".format(train_n))
+    print("Train: {}".format(train_n))
 
     val_n = 0
     for val in val_dict.values():
         val_n += len(val)
-    print("val size: {}".format(val_n))
+    print("Val: {}".format(val_n))
 
     test_n = 0
     for val in test_dict.values():
         test_n += len(val)
-    print("test size: {}".format(test_n))
+    print("Test: {}".format(test_n))
 
     dump_data_dicts(processed_dir, train_dict, val_dict, test_dict)
 
