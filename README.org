@@ -7,30 +7,105 @@ of interest to the meta-learning community independently of the algorithm.
 
 This repository is not finalized.
 
+* Setting up the environment
+There is a supplied conda environment file. Running
+#+begin_src bash
+conda create --name ikml --file spec-file.txt
+#+end_src
+will install the conda environment with the necessary
+dependencies into the conda environment ~ikml~. All sections below assumes that
+you are in the ~ikml~ conda environment.
+
 * Datasets
 The preprint introduces two new meta-learning regression datasets
 - ~Air Quality~ :: Meta-learning tasks derived from Beijing air quality timeseries data spanning a few years
 - ~Gas Sensor~ :: Meta-learning tasks derived Experimental timeseries data from gas sensors
 
-* Setting up the environment
-
 * Reproducing the results
+There is a supplied Makefile that automates most of the pulling and creating of
+the datasets. Please make sure you have a version of [[https://en.wikipedia.org/wiki/Makefile][Make]] installed. Please
+change directory so that your current working directory is this git repository.
+All commands below assume that you are in the top level of the repository.
+
+For running, and evaluating experiments I use [[https://guild.ai/][Guild AI]]. While the experiments
+can be run using python directly they been engineered with Guild in mind. The
+configurable parameters for each experiment can be found in the ~./guild.yml~
+file, leaving them as-is gives the experiments of the paper. You can see below
+how to change the parameters of interest.
+
+** Creating the datasets
+In a terminal where your current working directory is this git repo, run
+#+begin_src bash
+make create_datasets
+#+end_src
+This will pull and build all of the datasets used for benchmarking.
+
 ** Synthetic Data
-** Air Quality
-** Gas Sensor
+Generate the data by choosing a list of input dimensions ~L=${[d_1, d_2, ..., d_L]}~
+(this list can be of size 1 if but has to be a list). Note that the plotting has
+been hardcoded to work with d being in {1, 2, 5, 10, 20, 30}, so if you want to
+generate the plots, only pick d from this set. From the command line run
+#+begin_src bash
+guild run signal_recovery:bochner d=${L}
+#+end_src
+to generate the data for plotting.
+
+After this has finished running you can look up the guild ID of the batch run
+#+begin_src bash
+guild runs
+#+end_src
+which will output something like
+#+begin_example
+[1:d9cd5613]  signal_recovery:bochner   2021-03-07 13:26:52  completed  X_bases_sigma=0.2 X_marginal_sigma=0.2 alpha_sigma=1.0 boch_hidden_d
+[2:365f3857]  signal_recovery:bochner+  2021-03-07 13:26:52  completed
+#+end_example
+and you want the ID of the batch run (you can notice it by the =+= after the run
+command), here ~365f3857~.
+
+You can generate the plots by running
+#+begin_src bash
+python scripts/toy_regression/signal_recovery/get_learning_curves.py --guild_id 365f3857
+#+end_src
+and they can be found in ~plots/toy_regression/signal_recovery/bochner~.
+
+** TODO Air Quality
+:LOGBOOK:
+- State "TODO"       from              [2021-03-07 Sun 13:58]
+:END:
+
+
+** TODO Gas Sensor
+:LOGBOOK:
+- State "TODO"       from              [2021-03-07 Sun 13:58]
+:END:
+
 
 * Contact
 If you want to ask a question or reach out to me feel free to use my academic
 email address =ucabitf@ucl.ac.uk=!
 
+* Referencing
+If you want to reference this work (please do!) use the following bibentry
+#+begin_export latex
+@misc{if/cc/mp-ikml-2021,
+      title={Implicit Kernel Meta Learning Using Kernel Integral Forms},
+      author={Isak Falk and Carlo Ciliberto and Massimiliano Pontil},
+      year={2021},
+      eprint=Missing
+      archivePrefix={arXiv},
+      primaryClass=Missing
+}
+#+end_export
+
+
 * TODO
-- [ ] Clean up code
-- [ ] Create instructions for using guild AI
-- [ ] Make everything run from the command line
-- [ ] Data
-  + [ ] Pull data and unpack
-  + [ ] Create datasets
-- [ ] Add bib reference for report
-- [ ] Finish sections
-  + [ ] Setting up the environment
-  + [ ] Reproducing the results
+- [X] Clean up code
+- [X] Create instructions for using guild AI
+- [-] Make everything run from the command line
+  + [X] Synthetic
+  + [ ] Air Quality
+  + [ ] Gas Sensor
+- [X] Data
+  + [X] Pull data and unpack
+  + [X] Create datasets
+- [X] Add bib reference for report
