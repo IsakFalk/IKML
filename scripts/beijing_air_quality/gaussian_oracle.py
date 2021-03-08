@@ -7,7 +7,6 @@ from collections import OrderedDict
 import numpy as np
 import torch
 import torch.nn as nn
-
 from implicit_kernel_meta_learning.algorithms import RidgeRegression
 from implicit_kernel_meta_learning.data_utils import AirQualityDataLoader
 from implicit_kernel_meta_learning.experiment_utils import set_seed
@@ -68,14 +67,17 @@ def fast_adapt_ker(batch, model, loss, device):
 
 
 def main(
-    seed, k_support, k_query, holdout_size,
+    seed,
+    k_support,
+    k_query,
+    holdout_size,
 ):
     result = OrderedDict(
         meta_train_error=[],
         meta_valid_error=[],
         holdout_meta_test_error=[],
         holdout_meta_valid_error=[],
-        name="gaussian_oracle",
+        name="Gaussian Oracle",
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     set_seed(seed, False)
@@ -100,7 +102,10 @@ def main(
         meta_test_error = 0.0
         for test_batch in test_batches:
             evaluation_error = fast_adapt_ker(
-                batch=test_batch, model=model, loss=loss, device=device,
+                batch=test_batch,
+                model=model,
+                loss=loss,
+                device=device,
             )
             meta_test_error += evaluation_error.item()
         meta_test_error /= holdout_size

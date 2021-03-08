@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
 from implicit_kernel_meta_learning.algorithms import LearnedBiasRidgeRegression
 from implicit_kernel_meta_learning.data_utils import AirQualityDataLoader
 from implicit_kernel_meta_learning.experiment_utils import set_seed
@@ -68,7 +67,7 @@ def main(
         holdout_meta_valid_error=[],
         meta_val_every=meta_val_every,
         num_iterations=num_iterations,
-        name="linear",
+        name="LSQ with learned bias",
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     set_seed(seed, False)
@@ -102,7 +101,10 @@ def main(
         meta_valid_error = 0.0
         for train_batch in train_batches:
             evaluation_error = fast_adapt_ker(
-                batch=train_batch, model=model, loss=loss, device=device,
+                batch=train_batch,
+                model=model,
+                loss=loss,
+                device=device,
             )
             evaluation_error.backward()
             meta_train_error += evaluation_error.item()
@@ -110,7 +112,10 @@ def main(
             val_batches = [valdata.sample() for _ in range(meta_val_batch_size)]
             for val_batch in val_batches:
                 evaluation_error = fast_adapt_ker(
-                    batch=val_batch, model=model, loss=loss, device=device,
+                    batch=val_batch,
+                    model=model,
+                    loss=loss,
+                    device=device,
                 )
                 meta_valid_error += evaluation_error.item()
             meta_valid_error /= meta_val_batch_size
@@ -142,11 +147,17 @@ def main(
     meta_test_error = 0.0
     for (valid_batch, test_batch) in zip(valid_batches, test_batches):
         evaluation_error = fast_adapt_ker(
-            batch=valid_batch, model=model, loss=loss, device=device,
+            batch=valid_batch,
+            model=model,
+            loss=loss,
+            device=device,
         )
         meta_valid_error += evaluation_error.item()
         evaluation_error = fast_adapt_ker(
-            batch=test_batch, model=model, loss=loss, device=device,
+            batch=test_batch,
+            model=model,
+            loss=loss,
+            device=device,
         )
         meta_test_error += evaluation_error.item()
 

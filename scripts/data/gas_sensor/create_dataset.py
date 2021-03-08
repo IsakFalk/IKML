@@ -119,17 +119,17 @@ def main():
     train_n = 0
     for val in train_dict.values():
         train_n += len(val)
-    print("train: {}".format(train_n))
+    print("Train: {}".format(train_n))
 
     val_n = 0
     for val in valid_dict.values():
         val_n += len(val)
-    print("val: {}".format(val_n))
+    print("Val: {}".format(val_n))
 
     test_n = 0
     for val in test_dict.values():
         test_n += len(val)
-    print("test: {}".format(test_n))
+    print("Test: {}".format(test_n))
 
     with open(processed_dir / "train_dict.pkl", "wb") as f:
         pkl.dump(train_dict, f)

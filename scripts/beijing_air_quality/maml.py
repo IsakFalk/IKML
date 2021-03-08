@@ -9,7 +9,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
 from implicit_kernel_meta_learning.algorithms import RidgeRegression
 from implicit_kernel_meta_learning.data_utils import AirQualityDataLoader
 from implicit_kernel_meta_learning.experiment_utils import set_seed
@@ -103,7 +102,10 @@ def mlp_layer(in_dim, out_dim, nonlinearity, batch_norm=True):
             nonlinearity(),
         )
     else:
-        layer = nn.Sequential(nn.Linear(in_dim, out_dim), nonlinearity(),)
+        layer = nn.Sequential(
+            nn.Linear(in_dim, out_dim),
+            nonlinearity(),
+        )
 
     return layer
 
@@ -164,7 +166,7 @@ def main(
         holdout_meta_valid_error=[],
         meta_val_every=meta_val_every,
         num_iterations=num_iterations,
-        name="maml",
+        name="MAML",
     )
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     set_seed(seed, False)
