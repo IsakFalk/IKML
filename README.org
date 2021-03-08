@@ -79,9 +79,16 @@ Make sure that you have generated the datasets by following [[*Creating the data
 datasets]].
 
 *** Reproducing Results
-With ~DATASET~ being either ~air_quality~ or ~gas_sensor~ and ~SEED='[seed_1, ...,
-seed_L]'~ (if you want to reproduce the results set
-~SEED='[1, 2, 3, 4, 5]'~) get results of IKML by running
+With ~DATASET~ being either ~air_quality~ or ~gas_sensor~ and
+#+begin_src bash
+SEED='[seed_1, ..., seed_L]'
+#+end_src
+if you want to reproduce the results set
+#+begin_src bash
+SEED='[1, 2, 3, 4, 5]'
+#+end_src
+
+Get results of IKML by running
 #+begin_src bash
 guild run ${DATASET}:bochner_ikml seed=${SEED}
 #+end_src
@@ -126,7 +133,7 @@ email address =ucabitf@ucl.ac.uk=!
 
 * Referencing
 If you want to reference this work (please do!) use the following bibentry
-#+begin_export latex
+#+begin_verbatim
 @misc{if/cc/mp-ikml-2021,
       title={Implicit Kernel Meta Learning Using Kernel Integral Forms},
       author={Isak Falk and Carlo Ciliberto and Massimiliano Pontil},
@@ -135,4 +142,4 @@ If you want to reference this work (please do!) use the following bibentry
       archivePrefix={arXiv},
       primaryClass=Missing
 }
-#+end_export
+#+end_verbatim
