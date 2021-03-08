@@ -136,7 +136,7 @@ email address =ucabitf@ucl.ac.uk=!
 
 * Referencing
 If you want to reference this work (please do!) use the following bibentry
-#+begin_verbatim
+#+begin_example
 @misc{if/cc/mp-ikml-2021,
       title={Implicit Kernel Meta Learning Using Kernel Integral Forms},
       author={Isak Falk and Carlo Ciliberto and Massimiliano Pontil},
@@ -145,4 +145,4 @@ If you want to reference this work (please do!) use the following bibentry
       archivePrefix={arXiv},
       primaryClass=Missing
 }
-#+end_verbatim
+#+end_example
