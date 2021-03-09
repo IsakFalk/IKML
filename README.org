@@ -11,15 +11,15 @@ There is a supplied conda environment file. Running
 conda create --name ikml --file spec-file.txt
 #+end_src
 will install the conda environment with the necessary
-dependencies into the conda environment ~ikml~. You also need to install the
-current package locally
-#+begin_src bash
-pip install .
-#+end_src
+dependencies into the conda environment ~ikml~. 
 
 All sections below assumes that you are in the ~ikml~ conda environment
 #+begin_src bash
 conda activate ikml
+#+end_src
+You also need to install the current package locally
+#+begin_src bash
+pip install .
 #+end_src
 
 * Datasets
