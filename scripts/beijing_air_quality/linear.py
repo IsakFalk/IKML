@@ -150,7 +150,7 @@ def main(
 
     # Define model
     in_dim = 9
-    out_dim = 1
+    out_dim = hidden_dim
     kernel = LinearKernel()
     model = FeatureMapRidgeRegression(
         np.log(lam),
