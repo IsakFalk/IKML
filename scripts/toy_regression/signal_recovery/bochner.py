@@ -458,7 +458,7 @@ def main(
             nn.ReLU(),
             nn.Linear(linear_hidden_dim, linear_hidden_dim),
             nn.ReLU(),
-            nn.Linear(linear_hidden_dim, 1),
+            nn.Linear(linear_hidden_dim, 100),
         ).to(device)
         linear_kernel = LinearKernel()
         linear_model = FeatureMapRidgeRegression(
