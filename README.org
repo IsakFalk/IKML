@@ -1,6 +1,6 @@
 * Implicit Kernel Meta Learning
 This repository contains code and instructions for reproducing figures and
-numbers for the accompanying arxiv preprint (to-be-linked-once-uploaded). It
+numbers for the accompanying paper. It
 also contains the necessary functions to generate the datasets (synthetic and
 real) used in the preprint for benchmarking meta-learning algorithms and may be
 of interest to the meta-learning community independently of the algorithm.
@@ -137,12 +137,12 @@ email address =ucabitf@ucl.ac.uk=!
 * Referencing
 If you want to reference this work (please do!) use the following bibentry
 #+begin_example
-@misc{if/cc/mp-ikml-2021,
-      title={Implicit Kernel Meta Learning Using Kernel Integral Forms},
-      author={Isak Falk and Carlo Ciliberto and Massimiliano Pontil},
-      year={2021},
-      eprint=Missing
-      archivePrefix={arXiv},
-      primaryClass=Missing
+@inproceedings{
+	falk2022implicit,
+	title={Implicit kernel meta-learning using kernel integral forms},
+	author={John Isak Texas Falk and Carlo Ciliberto and massimiliano pontil},
+	booktitle={The 38th Conference on Uncertainty in Artificial Intelligence},
+	year={2022},
+	url={https://openreview.net/forum?id=rNgqwPUsqgq}
 }
 #+end_example
