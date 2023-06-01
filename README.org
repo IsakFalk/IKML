@@ -1,8 +1,8 @@
 * Implicit Kernel Meta Learning
 This repository contains code and instructions for reproducing figures and
-numbers for the accompanying paper. It
+numbers for the accompanying paper "Implicit kernel meta-learning using kernel integral forms" published as an oral at the proceedings of the Thirty-Eighth Conference on Uncertainty in Artificial Intelligence (UAI2022). It
 also contains the necessary functions to generate the datasets (synthetic and
-real) used in the preprint for benchmarking meta-learning algorithms and may be
+real) used in the paper for benchmarking meta-learning algorithms and may be
 of interest to the meta-learning community independently of the algorithm.
 
 * Setting up the environment
